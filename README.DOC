@@ -1,0 +1,119 @@
+CabsOnline Part 2 — README
+Student Name: Spencer Viernes
+Student ID: 23202635
+
+1. Public URL of the Deployed Application
+The application is deployed and can be accessed at:
+https://cabs-online-part2.netlify.app/
+2. Technology Stack
+•	React 18 — frontend UI framework
+•	Vite — build tool and local development server
+•	React Router DOM v6 — client side routing between pages
+•	Leaflet.js + React-Leaflet — interactive map rendering
+•	OpenStreetMap — map tile provider (free with no API key required)
+•	Google Fonts (Syne + DM Sans) — typography
+•	Netlify — static site hosting and deployment
+
+3. How to Run and Build the Project Locally
+Prerequisites: Node.js (v18 or later) must be installed. Download from https://nodejs.org/en
+
+Folder structure in this ZIP:
+•	cabs-online/src/ — all React source files (components, pages, App.jsx, main.jsx, App.css)
+•	cabs-online/public/ — static assets
+•	cabs-online/package.json — project dependencies and scripts
+•	cabs-online/vite.config.js — Vite build configuration
+•	cabs-online/dist/ — production build output (ready to deploy)
+
+To run locally from the source files:
+1.	Extract the ZIP and open a terminal in the extracted folder.
+2.	Navigate into the project folder:
+    cd cabs-online
+3.	Install dependencies (only needed once):
+       npm install
+4.	Start the local development server:
+       npm run dev
+The application will open at http://localhost:5173
+
+
+
+To build for production from source:
+5.	Run the build command inside the cabs-online folder:
+       npm run build
+6.	The compiled output will be generated in the cabs-online/dist/ folder.
+7.	To deploy, drag and drop the dist/ folder onto Netlify at https://netlify.com
+
+To run directly from the pre-built dist/ folder:
+The dist/ folder included in this ZIP is the pre-built production output. It can be deployed directly to any static hosting service (Netlify, GitHub Pages, etc.) without needing to run npm install or npm run build.
+
+4. Microservice API Endpoints Used
+This application uses in memory data management and does not connect to an external database or remote API. All booking data is stored in React application state during the session. No local or remote microservice endpoints are used.
+
+The map feature uses OpenStreetMap tile data served via the public tile endpoint:
+    https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+
+5. Feature Descriptions
+Book a Taxi
+A refactored version of the Part 1 booking form built in React. Accepts all required passenger inputs including name, phone number, address, optional suburb and destination suburb, and pickup date and time. All inputs are validated client side before submission. On successful submission, a unique booking reference number is generated in the format BRN00001 and a confirmation message is displayed on the same page without a page reload.
+
+Track Booking (Monitoring Service for Customers)
+Allows a passenger to enter their booking reference number to check the current status of their booking. The input is validated against the BRN format before lookup. The result displays the booking details including name, phone, pickup and destination suburbs, pickup date and time, and a status badge indicating whether the booking is unassigned or assigned.
+
+Fare Estimator (Querying Service)
+Allows a passenger to select a pickup suburb and destination suburb from a dropdown list of Auckland suburbs and receive an estimated fare range before committing to a booking. The fare is calculated using the Haversine formula to compute the straight line distance between the two suburb coordinates, then applies a base fare and per-kilometre rate to produce a low and high fare estimate.
+
+Map View (Map-Based Interaction)
+Allows a passenger to select a pickup suburb and destination suburb and see both locations plotted on an interactive Leaflet map. A dashed line is drawn between the two markers to indicate the route. The map automatically adjusts its zoom and centre to fit both markers. Map tiles are provided by OpenStreetMap.
+
+6. Testing Instructions
+To test the full flow of the application:
+
+Book a Taxi
+•	Navigate to the Book page.
+•	Fill in the form using the example inputs below and click Book Now.
+•	A confirmation message with a booking reference number will appear.
+
+Example Booking References (generated sequentially):
+•	First booking submitted in a session: BRN00001
+•	Second booking submitted in a session: BRN00002
+•	Third booking submitted in a session: BRN00003
+
+Example Booking Input:
+•	Customer Name: John Smith
+•	Phone: 02123456789
+•	Street Number: 12
+•	Street Name: Queen Street
+•	Suburb: Auckland CBD
+•	Destination Suburb: Newmarket
+•	Date: any future date in dd/mm/yyyy format
+•	Time: any future time in HH:MM format
+
+Track Booking
+•	Make a booking on the Book page first.
+•	Note the booking reference number shown in the confirmation message.
+•	Navigate to the Track page and enter the reference number.
+•	The booking details and status will be displayed.
+
+Sample Driver IDs:
+This application does not include a driver management feature. Bookings are created with a status of unassigned and can be updated to assigned through the admin interface. As a result, there are no driver IDs to provide.
+
+Fare Estimator
+•	Navigate to the Fare page.
+•	Select a pickup suburb (e.g. Auckland CBD) and a destination suburb (e.g. Manukau).
+•	Click Estimate Fare to see the estimated distance and fare range.
+
+Map View
+•	Navigate to the Map page.
+•	Select a pickup suburb and a destination suburb.
+•	Click Show on Map to display both locations and a route line on the interactive map.
+
+7. Limitations and Known Issues
+•	In-memory data only: Booking data is stored in React application state and is lost when the page is refreshed or the browser tab is closed. 
+•	Suburb list is fixed: The fare estimator and map view use a predefined list of Auckland suburbs with approximate coordinates. Suburbs not in the list cannot be selected.
+•	Fare is an estimate only: The fare calculation uses straight-line distance between suburb coordinates, not actual road distance or real time traffic data.
+•	Map shows straight-line route: The dashed line between markers represents a direct connection between suburbs, not a road based route.
+•	No authentication: The application does not implement user login or session management, consistent with the Part 1 specification.
+
+8. Reflection on AI-Supported Development Process
+For Part 1 of the assignment, development on my own and debugging help from AI, it was trial and error and would get tedious, especially dealing with things such as fetch requests, BRN formatting, and the time logic.
+Comparing Part 1 to Part 2, the AI produced refactored and created new files within a few prompts and without any issues. The routing, the map, the fare estimator, and the component structure all outputted without any issues when I put into VSCode and run it locally. The only issue, which was minor, was the database connection, where the AI pointed out that calling a live database from a Netlify deploted frontend would expose my phpMyAdmin login, and suggested that we use an in memory state instead.
+The difference between both Parts, was mainly the efficiency and amount of mistakes. Using the AI for part was far more efficient than solo coding in Part 1, and while having some issues and bugs in Part 1, Part 2 with AI had no struggle, thoroughly going through the files it needed, what needs to be refactored, what issues will occur, and how to solve it before even developing the code.
